@@ -1,23 +1,60 @@
 package app;
 
-public class Main {
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-  public static void main(String[] args) {
-    // Example 1: Bad practice - unused variable
-    int unusedVariable = 5;
+/**
+ * The entry point for the application.
+ * This class contains static utility methods for application execution.
+ */
+public final class ApplicationEntryPoint {
 
-    // Example 2: Performance issue - redundant method call in loop
-    for (int i = 0; i < 1000; i++) {
-      System.out.println(i);
-    }
+  private static final Logger LOGGER = Logger.getLogger(ApplicationEntryPoint.class.getName());
 
-    // Example 3: PMD - Simple rule violation (using an instance variable without initialization)
-    User user = new User();
-    System.out.println(user.getName());
+  // Private constructor to prevent instantiation
+  private ApplicationEntryPoint() {
+    throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
   }
 
-  // Example of a method with a bug (FindBugs will flag this)
-  public static void divide(int a, int b) {
-    System.out.println(a / b);
+  /**
+   * The main method is the entry point of the application.
+   *
+   * @param args command-line arguments.
+   */
+  public static void main(final String[] args) {
+    if (LOGGER.isLoggable(Level.INFO)) {
+      LOGGER.info("Application started");
+    }
+
+    final StringBuilder output = new StringBuilder();
+    for (int i = 0; i < 1000; i++) {
+      output.append(i).append('\n');
+    }
+
+    if (LOGGER.isLoggable(Level.INFO)) {
+      LOGGER.info(output.toString());
+    }
+
+    final SystemUser user = new SystemUser("Alice");
+    if (LOGGER.isLoggable(Level.INFO)) {
+      LOGGER.info(String.format("User's name: %s", user.getName()));
+    }
+  }
+
+  /**
+   * Divides two integers and logs the result.
+   *
+   * @param dividend the dividend.
+   * @param divisor  the divisor.
+   * @throws ArithmeticException if divisor is 0.
+   */
+  public static void divide(final int dividend, final int divisor) {
+    if (divisor == 0) {
+      LOGGER.warning("Division by zero is not allowed.");
+      throw new ArithmeticException("Division by zero");
+    }
+    if (LOGGER.isLoggable(Level.INFO)) {
+      LOGGER.info(String.format("Result: %d", dividend / divisor));
+    }
   }
 }
